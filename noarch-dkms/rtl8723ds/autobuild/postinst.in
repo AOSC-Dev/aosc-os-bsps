@@ -1,0 +1,19 @@
+if [ $(uname -m) = "riscv64" ]; then
+    sed -i \
+        "s|@MAKE_AFTER@|CONFIG_PLATFORM_RISCV_SUN20IW1P1=y CONFIG_PLATFORM_I386_PC=n|g" \
+        /usr/src/rtl8723ds-@PKGVER@/dkms.conf
+else 
+    sed -i \
+        "s|@MAKE_AFTER@| |g" \
+        /usr/src/rtl8723ds-@PKGVER@/dkms.conf
+fi
+unset ARCH
+
+for i in `ls /usr/lib/modules | grep -v 'extramodules'`; do
+    if [ -f "/usr/lib/modules/${i}/modules.dep" -a -f "/usr/lib/modules/${i}/modules.order" -a -f "/usr/lib/modules/${i}/modules.builtin" ]; then
+	echo -e "\033[36m**\033[0m\tBuilding rtl8723ds kernel modules for $i ..."
+        dkms install rtl8723ds/@PKGVER@ -k $i > /dev/null
+    else
+        echo -e "\033[33m**\033[0m\tSkipping incomplete kernel modules tree $i ..."
+    fi
+done

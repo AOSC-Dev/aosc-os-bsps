@@ -1,0 +1,10 @@
+PKGNAME=linux-kernel-sun20i-5.18
+PKGSEC=kernel
+PKGDEP=""
+BUILDDEP="bc git pahole parallel"
+PKGDES="Linux Kernel version 5.18.0 optimized for Allwinner D1(sun20i) SoC with T-Head C906 RISC-V 64-bit core"
+
+ABSTRIP=no
+ABELFDEP=no
+
+FAIL_ARCH="!(riscv64)"

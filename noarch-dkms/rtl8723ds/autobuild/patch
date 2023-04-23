@@ -1,0 +1,6 @@
+abinfo "Applying patch via autobuild/patch"
+for p in $(ls autobuild/patches/); do
+    pushd "$SRCDIR"/rtl8723ds
+        patch -Np1 -i "$SRCDIR"/autobuild/patches/"$p"
+    popd
+done

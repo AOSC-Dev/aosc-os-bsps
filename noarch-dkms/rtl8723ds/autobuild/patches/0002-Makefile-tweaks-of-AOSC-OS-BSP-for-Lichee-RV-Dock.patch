@@ -1,0 +1,54 @@
+From d487866f18a7eb2cb683874b0a43a6831d43b763 Mon Sep 17 00:00:00 2001
+From: Camber Huang <camber@poi.science>
+Date: Wed, 25 May 2022 22:57:17 +0800
+Subject: [PATCH 2/2] Makefile: tweaks of AOSC OS BSP for Lichee RV Dock
+
+Signed-off-by: Camber Huang <camber@poi.science>
+---
+ Makefile | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 6f3bf07..19e9f37 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
+-EXTRA_CFLAGS += -O1
++EXTRA_CFLAGS += -O2
+ #EXTRA_CFLAGS += -O3
+ #EXTRA_CFLAGS += -Wall
+ #EXTRA_CFLAGS += -Wextra
+@@ -146,6 +146,7 @@ CONFIG_PLATFORM_HISILICON = n
+ # Config for riscv is at a fundamental level. 
+ # Further modification may be required.
+ CONFIG_PLATFORM_RISCV = n
++CONFIG_PLATFORM_RISCV_SUN20IW1P1 = n
+ ###############################################################
+ 
+ CONFIG_DRVEXT_MODULE = n
+@@ -1723,12 +1724,21 @@ KSRC := /home/android_sdk/Telechips/v13.05_r1-tcc-android-4.2.2_tcc893x-evm_buil
+ MODULE_NAME := wlan
+ endif 
+ 
++ifeq ($(CONFIG_PLATFORM_RISCV_SUN20IW1P1), y)
++CONFIG_PLATFORM_RISCV := y
++endif
++
+ ifeq ($(CONFIG_PLATFORM_RISCV), y)
+ # This is a gereric config. More modification may be required.
+ EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
+ ARCH := riscv
++
++ifeq ($(CONFIG_PLATFORM_RISCV_SUN20IW1P1), y)
++EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
+ endif
+ 
++endif #CONFIG_PLATFORM_RISCV
++
+ ifeq ($(CONFIG_MULTIDRV), y)
+ 
+ ifeq ($(CONFIG_SDIO_HCI), y)
+-- 
+2.36.1
+

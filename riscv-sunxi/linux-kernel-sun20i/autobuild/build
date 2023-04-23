@@ -1,0 +1,77 @@
+abinfo "Preparing build environment ..."
+OLDARCH="$ARCH"
+unset ARCH
+SRCARCH="riscv"
+
+# Kernel configuration is based on mainline config, and tweaked based on nezha_defconfig
+abinfo "Installing Kernel configuration ..."
+cp -v autobuild/config "$SRCDIR"/.config
+
+abinfo "Setting up variables ..."
+. "$SRCDIR"/autobuild/build-common/set-var
+
+(
+    __COUNTER=1
+    __MAX_ATTEMPT=3
+    while [[ "$__COUNTER" -le "$__MAX_ATTEMPT" ]]; do
+        abinfo "Round $__COUNTER ..."
+        make ${MAKE_AFTER}
+        if (($?)); then
+            __COUNTER=$((_COUNTER + 1))
+        else
+            break
+        fi
+    done
+    if [[ "$__COUNTER" -gt "$__MAX_ATTEMPT" ]]; then
+        aberr "Admitting defeat after $__MAX_ATTEMPT attempts"
+    fi
+)
+
+abinfo "Installing Kernel modules ..."
+mkdir -pv "$PKGDIR"/usr
+make modules_install \
+    INSTALL_MOD_PATH="$PKGDIR"/usr ${MAKE_AFTER}
+
+abinfo "Installing Kernel image ..."
+install -Dvm644 "$SRCDIR"/arch/riscv/boot/Image \
+   "$PKGDIR"/usr/lib/aosc-os-riscv64-sun20i-boot/linux-kernel-$version$LOCALNAME/Image
+mkdir -pv "$PKGDIR"/boot
+for i in `find "$SRCDIR"/arch/riscv/boot/dts/ -name '*.dtb'`; do
+    install -Dvm644 $i -t \
+        "$PKGDIR"/usr/lib/aosc-os-riscv64-sun20i-boot/dtbs-kernel-$version$LOCALNAME/"$(basename $(dirname $i))"
+done
+install -Dvm644 "$SRCDIR"/arch/riscv/boot/Image \
+    "$PKGDIR"/boot/vmlinux-$version$LOCALNAME
+
+abinfo 'Resetting $ARCH variable ...'
+export ARCH="$OLDARCH"
+
+abinfo "Removing firmwares ..."
+rm -rfv "$PKGDIR"/usr/lib/firmware
+
+headers_extra=-sun20i 
+
+abinfo "Building and installing Kernel modules ..."
+. "$SRCDIR"/autobuild/build-common/ext-hdr
+
+(
+    abinfo "Building objtool ..."
+    cd "$SRCDIR"/tools/objtool
+    make
+
+)
+
+abinfo "Installing objtool ..."
+install -Dvm755 "$SRCDIR"/tools/objtool/objtool \
+    "$PKGDIR"/usr/src/linux-headers-${version}${headers_extra}/tools/objtool/objtool
+
+if [ -f "$SRCDIR"/System.map ]; then
+    abinfo "Copying System.map"
+    install -Dvm644 "$SRCDIR"/System.map \
+        "$PKGDIR"/usr/lib/modules/${version}${LOCALNAME}/System.map
+else
+    abwarn "No System.map found"
+fi
+
+abinfo "Generating installation and uninstallation scripts ..."
+. "$SRCDIR"/autobuild/build-common/gen-scripts

@@ -1,0 +1,40 @@
+From 968904f2396d24a9656afcd84782722dad122788 Mon Sep 17 00:00:00 2001
+From: Camber Huang <camber@poi.science>
+Date: Wed, 25 May 2022 21:56:13 +0800
+Subject: [PATCH] Makefile: add gereric configuration for riscv platform
+
+Signed-off-by: Camber Huang <camber@poi.science>
+---
+ Makefile | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 6c07ef9..6f3bf07 100644
+--- a/Makefile
++++ b/Makefile
+@@ -143,6 +143,9 @@ CONFIG_PLATFORM_RTK119X = n
+ CONFIG_PLATFORM_RTK129X = n
+ CONFIG_PLATFORM_NOVATEK_NT72668 = n
+ CONFIG_PLATFORM_HISILICON = n
++# Config for riscv is at a fundamental level. 
++# Further modification may be required.
++CONFIG_PLATFORM_RISCV = n
+ ###############################################################
+ 
+ CONFIG_DRVEXT_MODULE = n
+@@ -1720,6 +1723,12 @@ KSRC := /home/android_sdk/Telechips/v13.05_r1-tcc-android-4.2.2_tcc893x-evm_buil
+ MODULE_NAME := wlan
+ endif 
+ 
++ifeq ($(CONFIG_PLATFORM_RISCV), y)
++# This is a gereric config. More modification may be required.
++EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
++ARCH := riscv
++endif
++
+ ifeq ($(CONFIG_MULTIDRV), y)
+ 
+ ifeq ($(CONFIG_SDIO_HCI), y)
+-- 
+2.36.1
+

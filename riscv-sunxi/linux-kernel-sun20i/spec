@@ -1,0 +1,3 @@
+VER=5.18.0
+SRCS="tbl::https://github.com/CamberLoid/linux-kernel/archive/refs/tags/v${VER}-d1.tar.gz"
+CHKSUMS="sha256::11224d91ffb7212ab3874ae3ceb3a944716e6a4d00acd629ff7066c644464569"
