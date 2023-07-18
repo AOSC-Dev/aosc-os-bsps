@@ -1,0 +1,9 @@
+PKGNAME=linux-kernel-pinebook-pro-5.13.1
+PKGSEC=kernel
+PKGDEP=""
+BUILDDEP="bc dracut git"
+PKGDES="Linux Kernel version 5.13.1 optimized for Pinebook Pro with 64-bit ARMv8 cores (from Manjaro)"
+
+ABSTRIP=no
+ABELFDEP=no
+ABRPMAUTOPROVONLY=yes

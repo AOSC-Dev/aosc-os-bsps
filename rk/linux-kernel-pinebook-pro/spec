@@ -1,0 +1,4 @@
+VER=5.13.1
+SRCS="tbl::https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$VER.tar.xz"
+CHKSUMS="sha256::72aaf6464185526068ef51a1535a18844f36bee98f5b5b09b2312bfa9f4d0a90"
+SUBDIR="linux-$VER"

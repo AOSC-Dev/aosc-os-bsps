@@ -1,0 +1,4 @@
+#! /bin/bash
+if [ -e /etc/default/u-boot ] && which update-u-boot >/dev/null 2>&1; then
+	update-u-boot
+fi

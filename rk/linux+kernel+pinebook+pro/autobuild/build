@@ -1,0 +1,9 @@
+KERNVER=${PKGVER}
+
+mkdir -p "$PKGDIR"/usr/lib/aosc-os-arm64-rockchip-boot/
+mkdir -p "$PKGDIR"/usr/lib/aosc-os-arm64-rockchip-boot/linux-kernel-${KERNVER}-aosc-rockchip64/modules
+ln -sfv linux-kernel-${KERNVER}-aosc-pbp \
+	"$PKGDIR"/usr/lib/aosc-os-arm64-rockchip-boot/linux-kernel-pbp
+mkdir -p "$PKGDIR"/usr/lib/aosc-os-arm64-rockchip-boot/dtb-rk3399-pinebook-pro
+ln -sfv ../dtbs-kernel-${KERNVER}-aosc-pbp/rk3399-pinebook-pro.dtb \
+	"$PKGDIR"/usr/lib/aosc-os-arm64-rockchip-boot/dtb-rk3399-pinebook-pro/dtb.dtb

@@ -1,0 +1,8 @@
+PKGNAME=linux+kernel+rk64
+PKGSEC=kernel
+PKGDEP="linux-kernel-pinebook-pro-5.13.1"
+PKGDES="The Linux Kernel optimized for Pinebook Pro with 64-bit ARMv8 cores"
+
+ABSTRIP=no
+ABELFDEP=no
+ABRPMAUTOPROVONLY=yes
